@@ -1,57 +1,10 @@
- CuraLink Studio - AI Medical Research Assistant
-CuraLink Studio is a high-performance, private, and localized medical research tool built for the Humanity Founders Hackathon. It synthesizes real-time clinical data from PubMed and ClinicalTrials.gov using a local LLM to provide instant, actionable insights while ensuring 100% data privacy.
+CuraLink Studio — AI Medical Research Assistant
+Modular MERN Stack | Local LLM Reasoning | Parallel Clinical Retrieval
 
- Key Features
-Neural Synthesis Engine: Uses local LLM (TinyDolphin via Ollama) to summarize complex clinical papers.
-
-Parallel Retrieval: Simultaneously fetches data from multiple medical APIs for sub-20 second response times.
-
-Longitudinal Memory: Built-in MongoDB persistence to track patient research history and multi-turn clinical context.
-
-Privacy First: All medical queries are processed locally; sensitive data never leaves the machine.
-
-Responsive Studio UI: A futuristic, glassmorphic workspace designed for both desktop and mobile research.
-
- Tech Stack
-Frontend: React.js, Tailwind CSS, Lucide-React (Icons), Framer Motion.
-
-Backend: Node.js, Express.js.
-
-Database: MongoDB (MERN Stack).
-
-AI Inference: Ollama (Model: tinydolphin).
-
-DevOps: Docker Compose for rapid DB deployment.
-
- Installation & Setup
-1. Prerequisites
-Install Node.js
-
-Install Ollama and run:
-
-Bash
-ollama pull tinydolphin
-Install Docker (Optional, for MongoDB).
-
-2. Backend Setup
-Bash
-cd curalink-backend
-npm install
-# Start MongoDB via Docker or local service
-docker-compose up -d 
-node server.js
-3. Frontend Setup
-Bash
-cd frontend
-npm install
-npm start
- Modular Architecture
-The project follows a clean, industrial-standard folder structure:
-
-models/: MongoDB Schemas.
-
-controllers/: Request handling logic.
-
-services/: External API (PubMed) and LLM (Ollama) integrations.
-
-routes/: API endpoint definitions.
+An intelligent medical research engine that extracts, ranks, and synthesizes data from global clinical repositories while maintaining absolute data privacy.
+Layer,Technology,Purpose
+Frontend,React 18 + Tailwind CSS,"High-performance, responsive research workspace"
+Backend,Node.js + Express,Orchestration of retrieval and reasoning pipelines
+Database,MongoDB,Persistent storage for patient research history
+AI Engine,Ollama (TinyDolphin),"Local, private LLM synthesis (Zero Data Leak)"
+APIs,PubMed + ClinicalTrials.gov,Real-time clinical evidence sources
