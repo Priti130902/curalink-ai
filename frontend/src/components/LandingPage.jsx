@@ -1,5 +1,5 @@
 import React from 'react';
-import { Brain, User, Activity, MapPin, Sparkles, Send, Shield } from 'lucide-react';
+import { User, Activity, MapPin, Sparkles, Send,  } from 'lucide-react';
 
 const LandingPage = ({ form, setForm, onSearch }) => {
   return (

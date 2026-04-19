@@ -1,7 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { 
-  Brain, User, Activity, MapPin, RotateCcw, FileText, Sparkles, 
-  Zap, Loader2, Send, MessageSquare, ChevronLeft, Trash2 
+import {  User, Activity, MapPin, FileText, Sparkles, Loader2, Send, MessageSquare, ChevronLeft, Trash2 
 } from 'lucide-react';
 
 const ResearchStudio = ({ form, setForm, results, loading, handleSearch, setView, setResults }) => {
