@@ -8,6 +8,7 @@ function App() {
   const [form, setForm] = useState({ query: '', disease: '', patientName: '', location: '' });
   const [results, setResults] = useState([]); 
   const [loading, setLoading] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
  
   const handleSetView = (v) => {
     setView(v);
@@ -53,27 +54,33 @@ function App() {
     }
   };
 
-  return (
-    <div className="App overflow-x-hidden">
-      {view === 'landing' ? (
-        <LandingPage 
-          form={form} 
-          setForm={setForm} 
-          onSearch={handleSearch} 
-        />
-      ) : (
-        <ResearchStudio 
-          form={form} 
-          setForm={setForm} 
-          results={results} 
-          loading={loading} 
-          handleSearch={handleSearch} 
-          setView={handleSetView} 
-          setResults={setResults} 
-        />
-      )}
-    </div>
-  );
+return (
+  <div className="App overflow-x-hidden">
+    {view === 'landing' ? (
+      <LandingPage
+        form={form}
+        setForm={setForm}
+        onSearch={handleSearch}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
+    ) : (
+      <ResearchStudio
+        form={form}
+        setForm={setForm}
+        results={results}
+        loading={loading}
+        handleSearch={handleSearch}
+        setView={handleSetView}
+        setResults={setResults}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
+    )}
+
+  </div>
+
+);
 }
 
 export default App;

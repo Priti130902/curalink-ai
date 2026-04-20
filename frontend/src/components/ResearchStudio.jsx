@@ -1,167 +1,104 @@
 import React, { useRef, useEffect } from 'react';
 import { 
-  User, Activity, MapPin, FileText, Sparkles, Loader2, Send, 
-  MessageSquare, ChevronLeft, Trash2 
+  Plus, Sparkles, Loader2, Send,  Trash2, BrainCircuit, X, FileText, Sun, Moon
 } from 'lucide-react';
 
-const ResearchStudio = ({ form, setForm, results, loading, handleSearch, setView, setResults }) => {
+const ResearchStudio = ({ form, setForm, results, loading, handleSearch, setView, setResults, darkMode, setDarkMode }) => {
   const scrollRef = useRef(null);
 
-  // Auto-scroll logic: Jab bhi naya result aaye ya loading start ho
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [results, loading]);
 
-  const suggestions = [`Side effects?`, `Success rates?`, `Active trials?` ];
+  const deleteSingleChat = (i) => setResults(results.filter((_, idx) => idx !== i));
+
+  const theme = {
+    bg: darkMode ? 'bg-[#0A0B0D]' : 'bg-[#F9F9F9]',
+    side: darkMode ? 'bg-[#0D0E10] border-white/5' : 'bg-white border-slate-200 shadow-2xl',
+    text: darkMode ? 'text-white' : 'text-slate-900',
+    card: darkMode ? 'bg-[#111214] border-white/5 shadow-2xl' : 'bg-white border-slate-100 shadow-xl shadow-orange-50/50',
+    accent: 'text-[#C5A572]',
+    input: darkMode ? 'bg-[#111214] border-white/10' : 'bg-white border-slate-200'
+  };
 
   return (
-    <div className="min-h-screen bg-[#0A0B0D] text-white font-sans selection:bg-[#C5A572]/20 overflow-x-hidden">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[#111214]/90 backdrop-blur-xl border-b border-white/5 px-4 md:px-8 h-16 md:h-20 flex items-center justify-between">
-        <button 
-          onClick={() => setView('landing')} 
-          className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-400 hover:text-[#C5A572] transition-colors"
-        >
-          <ChevronLeft size={16}/> <span className="hidden md:inline text-left">Edit Profile</span>
+    <div className={`min-h-screen flex flex-col md:flex-row transition-colors duration-500 ${theme.bg} ${theme.text}`}>
+      
+      <aside className={`w-full md:w-[300px] border-r p-6 flex flex-col space-y-10 shrink-0 ${theme.side}`}>
+        <div className="flex items-center justify-between px-2">
+          <div className="flex items-center gap-3">
+            <BrainCircuit size={24} className={theme.accent}/>
+            <span className="font-black text-xl tracking-tighter italic">CuraLink</span>
+          </div>
+          <button onClick={() => setDarkMode(!darkMode)} className={`p-2 rounded-lg ${darkMode ? 'text-yellow-400 bg-white/5' : 'text-orange-600 bg-orange-50'}`}>
+            {darkMode ? <Sun size={18}/> : <Moon size={18}/>}
+          </button>
+        </div>
+
+        <button onClick={() => setView('landing')} className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${darkMode ? 'bg-white text-black hover:bg-[#C5A572]' : 'bg-slate-900 text-white hover:bg-black'}`}>
+          <Plus size={16}/> <span>Back to Profile</span>
         </button>
         
-        <div className="flex gap-2 md:gap-3">
-          <button 
-            onClick={() => { if(window.confirm("Clear all research?")) setResults([]) }} 
-            className="p-2 md:p-2.5 bg-red-500/10 text-red-400 rounded-lg border border-red-400/10 hover:bg-red-500/20"
-          >
-            <Trash2 size={16}/>
-          </button>
-          <button 
-            onClick={() => window.print()} 
-            className="p-2 md:p-2.5 bg-white/5 text-slate-400 rounded-lg border border-white/10 hover:bg-white/10"
-          >
-            <FileText size={16}/>
-          </button>
-        </div>
-      </nav>
-
-      <main className="max-w-7xl mx-auto pt-24 md:pt-32 px-4 md:px-6 pb-60 flex flex-col lg:flex-row gap-6 md:gap-10">
-        {/* Sidebar */}
-        <aside className="w-full lg:w-[320px]">
-          <div className="bg-[#111214] border border-white/5 rounded-[2.5rem] p-8 md:p-10 sticky top-32 shadow-[0_20px_50px_rgba(0,0,0,0.5)] space-y-10">
-            <h3 className="text-[10px] font-black text-[#C5A572] uppercase tracking-[0.5em] border-b border-white/5 pb-5 italic text-left">Profile Data</h3>
-            
-            <div className="flex flex-row lg:flex-col gap-6 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 scrollbar-hide text-left">
-              <div className="min-w-[120px] space-y-1">
-                <span className="text-[8px] font-black text-slate-500 uppercase flex items-center gap-2 tracking-[0.2em] italic">
-                  <User size={10} className="text-[#C5A572]"/> Patient
-                </span>
-                <span className="text-sm font-bold block truncate text-white">{form.patientName || 'Anonymous'}</span>
+        <div className="flex-1 space-y-6 overflow-y-auto scrollbar-hide pt-4">
+          <p className="text-[10px] font-black opacity-40 uppercase tracking-[0.3em] px-2 italic text-left">Neural History</p>
+          <div className="space-y-3">
+            {results.map((r, i) => (
+              <div key={i} className={`group relative p-4 rounded-xl border transition-all ${darkMode ? 'bg-white/[0.03] border-white/5' : 'bg-slate-50 border-slate-200'}`}>
+                <p className="text-[11px] font-bold truncate pr-6 italic text-left">{r.query}</p>
+                <button onClick={() => deleteSingleChat(i)} className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <X size={14}/>
+                </button>
               </div>
-
-              <div className="min-w-[120px] space-y-1">
-                <span className="text-[8px] font-black text-slate-500 uppercase flex items-center gap-2 tracking-[0.2em] italic">
-                  <Activity size={10} className="text-[#C5A572]"/> Condition
-                </span>
-                <span className="text-sm font-bold block truncate text-[#C5A572]">{form.disease || 'N/A'}</span>
-              </div>
-
-              <div className="min-w-[120px] space-y-1">
-                <span className="text-[8px] font-black text-slate-500 uppercase flex items-center gap-2 tracking-[0.2em] italic">
-                  <MapPin size={10} className="text-[#C5A572]"/> Location
-                </span>
-                <span className="text-sm font-bold block truncate text-white">{form.location || 'Global'}</span>
-              </div>
-            </div>
-
-            <div className="hidden lg:block pt-6 border-t border-white/5">
-              <div className="p-4 bg-[#0A0B0D] rounded-2xl border border-white/5 text-[9px] font-bold text-slate-500 italic leading-relaxed text-left">
-                Real-time synthesis active using PubMed & ClinicalTrials.gov streams.
-              </div>
-            </div>
+            ))}
           </div>
-        </aside>
+        </div>
+      </aside>
 
-        {/* Content Section */}
-        <section className="w-full lg:w-3/4 space-y-8 md:space-y-12">
-          {results.length === 0 && !loading && (
-            <div className="h-64 flex flex-col items-center justify-center border-2 border-dashed border-white/5 rounded-[3rem] text-slate-600">
-              <Sparkles size={40} className="mb-4 opacity-20" />
-              <p className="text-[10px] font-black uppercase tracking-[0.3em]">Start your research synthesis above</p>
-            </div>
-          )}
+      <main className="flex-1 flex flex-col h-screen relative">
+        <header className={`h-20 border-b flex items-center justify-between px-8 backdrop-blur-xl sticky top-0 z-50 ${darkMode ? 'bg-[#111214]/90 border-white/5' : 'bg-white/90 border-slate-100'}`}>
+          <div className="flex flex-col text-left">
+             <span className={`text-[10px] font-black uppercase tracking-[0.4em] italic ${theme.accent}`}>Neural Stream</span>
+             <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-1">{form.patientName} • {form.disease}</span>
+          </div>
+          <div className="flex gap-2">
+            <button onClick={() => setResults([])} className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"><Trash2 size={18}/></button>
+            <button onClick={() => window.print()} className={`p-2.5 rounded-lg border ${darkMode ? 'bg-white/5 border-white/10 text-slate-400' : 'bg-slate-100 border-slate-200 text-slate-600'}`}><FileText size={18}/></button>
+          </div>
+        </header>
 
+        <div className="flex-1 overflow-y-auto p-6 md:p-12 space-y-12 scrollbar-hide">
           {results.map((res, i) => (
-            <div key={i} className="bg-[#111214] rounded-[2rem] md:rounded-[3rem] p-6 md:p-14 border border-white/5 shadow-2xl space-y-6 md:space-y-10 text-left animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="flex items-center gap-3 text-[#C5A572] font-black italic uppercase text-[10px] md:text-[11px] tracking-[0.4em]">
-                <Sparkles size={16}/> {res.query}
-              </div>
-              
-              <div className="text-md md:text-xl leading-relaxed text-slate-100 border-l-4 border-[#C5A572] pl-4 md:pl-10 whitespace-pre-line font-medium italic">
-                {res.answer}
-              </div>
-              
-              <div className="pt-6 border-t border-white/5">
-                <p className="text-[9px] font-black text-slate-500 uppercase flex items-center gap-2 mb-4 tracking-widest">
-                  <MessageSquare size={10}/> Research Branches
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {suggestions.map((s, idx) => (
-                    <button 
-                      key={idx} 
-                      onClick={() => handleSearch(null, s)} 
-                      className="text-[9px] font-bold py-2 px-4 bg-white/5 border border-white/10 rounded-full hover:bg-[#C5A572] hover:text-black transition-all hover:-translate-y-1"
-                    >
-                      {s}
-                    </button>
-                  ))}
+            <div key={i} className="max-w-4xl mx-auto space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="flex justify-end">
+                <div className={`px-6 py-2 rounded-full text-[10px] font-black uppercase italic tracking-widest border shadow-sm ${darkMode ? 'bg-white/5 border-white/5 text-[#C5A572]' : 'bg-white border-slate-200 text-[#C5A572]'}`}>
+                  {res.query}
                 </div>
               </div>
 
-              {res.sources && res.sources.length > 0 && (
-                <div className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {res.sources.map((src, idx) => (
-                    <a key={idx} href={src.url} target="_blank" rel="noreferrer" className="p-4 bg-[#0A0B0D] border border-white/5 rounded-2xl hover:border-[#C5A572]/40 transition-all group block">
-                      <span className="text-[8px] font-black text-[#C5A572] uppercase bg-[#C5A572]/10 px-2 py-1 rounded">Source • {src.year || '2026'}</span>
-                      <h5 className="font-bold text-[10px] mt-2 text-white line-clamp-1 italic group-hover:text-[#C5A572] transition-colors">{src.title}</h5>
-                    </a>
-                  ))}
+              <div className={`rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-14 border shadow-2xl space-y-10 text-left ${theme.card}`}>
+                <div className={`flex items-center gap-3 font-black italic uppercase text-[10px] tracking-[0.4em] ${theme.accent}`}>
+                  <Sparkles size={16}/> Neural Synthesis
                 </div>
-              )}
+                <div className={`text-md md:text-2xl leading-relaxed border-l-4 pl-8 italic border-[#C5A572] ${darkMode ? 'text-slate-100' : 'text-slate-800'}`}>
+                  {res.answer}
+                </div>
+              </div>
             </div>
           ))}
-
-          {loading && (
-            <div className="bg-[#111214] border border-[#C5A572]/20 rounded-[2rem] p-10 md:p-16 flex flex-col items-center animate-pulse">
-              <Loader2 size={30} className="text-[#C5A572] animate-spin mb-4" />
-              <p className="text-[10px] font-black text-[#C5A572] uppercase tracking-[0.5em]">Synthesizing Neural Streams...</p>
-            </div>
-          )}
-          
-          {/* Invisible anchor for scrolling */}
-          <div ref={scrollRef} className="h-20" />
-        </section>
-      </main>
-
-      {/* Input Bar */}
-      <div className="fixed bottom-0 left-0 w-full p-4 md:p-10 bg-gradient-to-t from-[#0A0B0D] via-[#0A0B0D]/90 to-transparent z-50">
-        <div className="max-w-4xl mx-auto lg:pl-[25%]">
-          <form 
-            onSubmit={handleSearch} 
-            className="flex bg-[#111214] border border-white/10 rounded-full md:rounded-[2.5rem] p-2 shadow-2xl focus-within:border-[#C5A572]/50 transition-all backdrop-blur-md"
-          >
-            <input 
-              className="flex-1 bg-transparent px-4 md:px-8 py-3 md:py-4 text-white font-bold text-sm md:text-lg outline-none placeholder:text-slate-800" 
-              placeholder="Deepen research or ask follow-up..." 
-              value={form.query} 
-              onChange={e => setForm({...form, query: e.target.value})} 
-            />
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="bg-[#C5A572] text-[#0A0B0D] px-6 md:px-10 rounded-full md:rounded-[1.8rem] font-black text-[10px] uppercase shadow-xl transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
-            >
-              {loading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16}/>}
-            </button>
-          </form>
+          <div ref={scrollRef} className="h-32" />
         </div>
-      </div>
+
+        <div className="p-8 z-50">
+          <div className="max-w-3xl mx-auto">
+            <form onSubmit={handleSearch} className={`flex border rounded-full md:rounded-[2.5rem] p-2 transition-all shadow-2xl ${theme.input}`}>
+              <input className={`flex-1 bg-transparent px-8 py-4 font-bold text-lg outline-none italic ${darkMode ? 'text-white placeholder:text-slate-900' : 'text-slate-900 placeholder:text-slate-300'}`} placeholder="Continue research..." value={form.query} onChange={e => setForm({...form, query: e.target.value})} />
+              <button type="submit" className="bg-[#C5A572] text-black w-14 h-14 rounded-full flex items-center justify-center transition-all shadow-lg shadow-orange-200/50">
+                {loading ? <Loader2 size={20} className="animate-spin" /> : <Send size={20}/>}
+              </button>
+            </form>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
