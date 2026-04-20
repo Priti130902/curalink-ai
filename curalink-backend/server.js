@@ -2,26 +2,25 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const chatRoutes = require('./routes/chatRoutes'); // Ye line zaruri hai
+const chatRoutes = require('./routes/chatRoutes');
 
 const app = express();
 
 app.use(cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: process.env.FRONTEND_URL || "*",
     credentials: true
 }));
 
 app.use(express.json());
 
-// MongoDB Atlas Connection
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ Connected to MongoDB Atlas'))
-  .catch(err => console.error('❌ MongoDB Connection Error:', err));
+  .then(() => console.log(' Connected to MongoDB Atlas'))
+  .catch(err => console.error(' MongoDB Connection Error:', err));
 
 // Routes
-app.use('/api', chatRoutes); // Saare chat logic yahan se chalenge
+app.use('/api', chatRoutes);
 
-app.get('/', (req, res) => res.send('API is running...'));
+app.get('/', (req, res) => res.send('CuraLink AI Backend is Live!'));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server on port ${PORT}`));
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));

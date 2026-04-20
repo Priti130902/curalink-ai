@@ -2,13 +2,12 @@ const axios = require('axios');
 
 const generateLLMResponse = async (data, query, patient, disease) => {
   try {
-    // Note: process.env.GROQ_API_KEY ko Render ke settings mein dalna hoga
     const response = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
       model: "llama-3.3-70b-versatile",
       messages: [
         {
           role: "system",
-          content: "You are a professional medical research assistant. Use the provided data to answer the query briefly."
+          content: "You are a professional medical research assistant. Use the provided research data to answer the user's query in 3-4 professional bullet points."
         },
         {
           role: "user",
