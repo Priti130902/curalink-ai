@@ -6,16 +6,13 @@ const chatRoutes = require('./routes/chatRoutes');
 
 const app = express();
 
-app.use(cors({
-    origin: process.env.FRONTEND_URL || "*",
-    credentials: true
-}));
-
+app.use(cors()); 
 app.use(express.json());
 
+// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log(' Connected to MongoDB Atlas'))
-  .catch(err => console.error(' MongoDB Connection Error:', err));
+  .catch(err => console.error('MongoDB Connection Error:', err));
 
 // Routes
 app.use('/api', chatRoutes);
