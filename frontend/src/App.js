@@ -9,6 +9,8 @@ function App() {
   const [results, setResults] = useState([]); 
   const [loading, setLoading] = useState(false);
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const handleSetView = (v) => {
     setView(v);
     localStorage.setItem('view', v);
@@ -23,7 +25,10 @@ function App() {
     setLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/chat', { ...form, query: activeQuery });
+      const res = await axios.post(`${API_URL}/api/chat`, { 
+        ...form, 
+        query: activeQuery 
+      });
       
       setResults(prev => [{
         query: activeQuery,
@@ -32,8 +37,14 @@ function App() {
       }, ...prev]);
 
       setForm(f => ({ ...f, query: '' }));
+
     } catch (err) {
-      setResults(prev => [{ query: activeQuery, answer: '⚠️ Engine Timeout.', sources: [] }, ...prev]);
+      console.error(err);
+      setResults(prev => [{ 
+        query: activeQuery, 
+        answer: '⚠️ Server Error / Timeout.', 
+        sources: [] 
+      }, ...prev]);
     } finally {
       setLoading(false);
     }
