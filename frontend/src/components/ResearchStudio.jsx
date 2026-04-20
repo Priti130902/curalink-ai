@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { 
-  Plus, Globe, Loader2, Send, Trash2, BrainCircuit, X,  Sun, Moon,
-  Beaker, BookOpen,Info, MessageSquare
-} from 'lucide-center';
+  Plus, Globe,  Loader2, Send,  Trash2, BrainCircuit, X, Sun, Moon,
+  Beaker, BookOpen,Info, MessageSquare 
+} from 'lucide-react';
 
 const ResearchStudio = ({ form, setForm, results, loading, handleSearch, setView, setResults, darkMode, setDarkMode }) => {
   const scrollRef = useRef(null);
