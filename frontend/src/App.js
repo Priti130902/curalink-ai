@@ -9,7 +9,8 @@ function App() {
   const [results, setResults] = useState([]); 
   const [loading, setLoading] = useState(false);
 
-  const API_URL = process.env.REACT_APP_API_URL;
+
+  const API_URL = "https://curalink-ai-1fdj.onrender.com";
 
   const handleSetView = (v) => {
     setView(v);
@@ -19,7 +20,11 @@ function App() {
   const handleSearch = async (e, customQuery) => {
     if (e) e.preventDefault();
     const activeQuery = customQuery || form.query;
-    if (!activeQuery.trim() || !form.disease.trim()) return;
+
+    if (!activeQuery.trim() || !form.disease.trim()) {
+      alert("Please fill all required fields");
+      return;
+    }
 
     handleSetView('studio');
     setLoading(true);
@@ -29,7 +34,7 @@ function App() {
         ...form, 
         query: activeQuery 
       });
-      
+
       setResults(prev => [{
         query: activeQuery,
         answer: res.data.answer,
@@ -39,11 +44,12 @@ function App() {
       setForm(f => ({ ...f, query: '' }));
 
     } catch (err) {
-      console.error(err);
-      setResults(prev => [{ 
-        query: activeQuery, 
-        answer: '⚠️ Server Error / Timeout.', 
-        sources: [] 
+      console.error("API ERROR:", err);
+
+      setResults(prev => [{
+        query: activeQuery,
+        answer: 'Server Error / Timeout. Try again.',
+        sources: []
       }, ...prev]);
     } finally {
       setLoading(false);
@@ -56,9 +62,13 @@ function App() {
         <LandingPage form={form} setForm={setForm} onSearch={handleSearch} />
       ) : (
         <ResearchStudio 
-          form={form} setForm={setForm} results={results} 
-          loading={loading} handleSearch={handleSearch} 
-          setView={handleSetView} setResults={setResults} 
+          form={form} 
+          setForm={setForm} 
+          results={results} 
+          loading={loading} 
+          handleSearch={handleSearch} 
+          setView={handleSetView} 
+          setResults={setResults} 
         />
       )}
     </div>
