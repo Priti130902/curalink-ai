@@ -4,10 +4,11 @@ import LandingPage from './components/LandingPage';
 import ResearchStudio from './components/ResearchStudio';
 
 function App() {
-  const [view, setView] = useState(localStorage.getItem('view') || 'landing');
+ const [view, setView] = useState('landing');
   const [form, setForm] = useState({ query: '', disease: '', patientName: '', location: '' });
   const [results, setResults] = useState([]); 
   const [loading, setLoading] = useState(false);
+ 
   const handleSetView = (v) => {
     setView(v);
     localStorage.setItem('view', v);
