@@ -9,9 +9,6 @@ function App() {
   const [results, setResults] = useState([]); 
   const [loading, setLoading] = useState(false);
 
-
-  const API_URL = "https://curalink-ai-1fdj.onrender.com";
-
   const handleSetView = (v) => {
     setView(v);
     localStorage.setItem('view', v);
@@ -20,21 +17,14 @@ function App() {
   const handleSearch = async (e, customQuery) => {
     if (e) e.preventDefault();
     const activeQuery = customQuery || form.query;
-
-    if (!activeQuery.trim() || !form.disease.trim()) {
-      alert("Please fill all required fields");
-      return;
-    }
+    if (!activeQuery.trim() || !form.disease.trim()) return;
 
     handleSetView('studio');
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API_URL}/api/chat`, { 
-        ...form, 
-        query: activeQuery 
-      });
-
+      const res = await axios.post('http://localhost:5000/api/chat', { ...form, query: activeQuery });
+      
       setResults(prev => [{
         query: activeQuery,
         answer: res.data.answer,
@@ -42,15 +32,8 @@ function App() {
       }, ...prev]);
 
       setForm(f => ({ ...f, query: '' }));
-
     } catch (err) {
-      console.error("API ERROR:", err);
-
-      setResults(prev => [{
-        query: activeQuery,
-        answer: 'Server Error / Timeout. Try again.',
-        sources: []
-      }, ...prev]);
+      setResults(prev => [{ query: activeQuery, answer: '⚠️ Engine Timeout.', sources: [] }, ...prev]);
     } finally {
       setLoading(false);
     }
@@ -62,13 +45,9 @@ function App() {
         <LandingPage form={form} setForm={setForm} onSearch={handleSearch} />
       ) : (
         <ResearchStudio 
-          form={form} 
-          setForm={setForm} 
-          results={results} 
-          loading={loading} 
-          handleSearch={handleSearch} 
-          setView={handleSetView} 
-          setResults={setResults} 
+          form={form} setForm={setForm} results={results} 
+          loading={loading} handleSearch={handleSearch} 
+          setView={handleSetView} setResults={setResults} 
         />
       )}
     </div>
